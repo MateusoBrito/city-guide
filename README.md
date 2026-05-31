@@ -1,36 +1,232 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# City Guide
 
-## Getting Started
+Sistema web para consulta e avaliação de estabelecimentos em diferentes cidades.
 
-First, run the development server:
+## Tecnologias Utilizadas
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* Prisma ORM
+* MySQL
+
+---
+
+# Estrutura do Projeto
+
+```text
+city-guide/
+│
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+│
+├── public/
+│
+├── src/
+│   ├── app/
+│   │   ├── page.tsx
+│   │   ├── login/
+│   │   ├── registrar/
+│   │   ├── cidades/
+│   │   ├── estabelecimentos/
+│   │   └── admin/
+│   │
+│   ├── components/
+│   │
+│   ├── lib/
+│   │   └── prisma.ts
+│   │
+│   └── types/
+│
+├── .env
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+---
+
+# Configuração do Ambiente
+
+## 1. Clonar o Repositório
+
+```bash
+git clone <URL_DO_REPOSITORIO>
+cd city-guide
+```
+
+---
+
+## 2. Instalar Dependências
+
+```bash
+npm install
+```
+
+---
+
+## 3. Criar Banco de Dados
+
+Acesse o MySQL:
+
+```bash
+mysql -u root -p
+```
+
+Crie o banco:
+
+```sql
+CREATE DATABASE city_guide;
+```
+
+Verifique se foi criado:
+
+```sql
+SHOW DATABASES;
+```
+
+---
+
+## 4. Configurar Variáveis de Ambiente
+
+Criar um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL="mysql://USUARIO:SENHA@HOST:PORTA/city_guide"
+```
+
+Exemplo:
+
+```env
+DATABASE_URL="mysql://root:minhaSenha@localhost:3306/city_guide"
+```
+
+---
+
+## 5. Validar o Schema Prisma
+
+```bash
+npx prisma validate
+```
+
+---
+
+## 6. Criar as Tabelas do Banco
+
+```bash
+npx prisma migrate dev --name init
+```
+
+Esse comando irá:
+
+* Criar as tabelas no banco
+* Gerar as migrations
+* Gerar o Prisma Client
+
+---
+
+# Executando o Projeto
+
+Inicie o servidor de desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A aplicação ficará disponível em:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# Prisma Studio
 
-To learn more about Next.js, take a look at the following resources:
+Para visualizar e editar os dados do banco:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx prisma studio
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# Comandos Úteis
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Validar Schema
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx prisma validate
+```
+
+## Gerar Prisma Client
+
+```bash
+npx prisma generate
+```
+
+## Criar Nova Migration
+
+```bash
+npx prisma migrate dev --name nome_da_migration
+```
+
+## Abrir Prisma Studio
+
+```bash
+npx prisma studio
+```
+
+## Resetar Banco de Dados
+
+```bash
+npx prisma migrate reset
+```
+
+---
+
+# Modelo de Dados
+
+## Cidade
+
+* id
+* nome
+* estado
+* pais
+
+## Estabelecimento
+
+* id
+* nome
+* categoria
+* descricao
+* cep
+* rua
+* bairro
+* numero
+* complemento
+* url
+* telefone
+
+## Usuario
+
+* email
+* nome
+
+## Avaliacao
+
+* nota
+* comentario
+* usuario
+* estabelecimento
+
+---
+
+# Integrantes
+
+* Mateus Brito
+* Ester Maria
+* Lucas Campelo
+
