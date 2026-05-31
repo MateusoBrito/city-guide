@@ -1,0 +1,62 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Cidade {
+  id      Int     @id @default(autoincrement())
+  nome    String
+  estado  String
+  pais    String
+
+  usuarios         Usuario[]
+  estabelecimentos Estabelecimento[]
+}
+
+model Estabelecimento {
+  id           Int    @id @default(autoincrement())
+  nome         String
+  categoria    String
+  descricao    String
+
+  cep          String
+  rua          String
+  bairro       String
+  numero       String
+  complemento  String?
+
+  url          String?
+  telefone     String?
+
+  cidadeId     Int
+  cidade       Cidade @relation(fields: [cidadeId], references: [id])
+
+  avaliacoes   Avaliacao[]
+}
+
+model Usuario {
+  email        String @id
+  nome         String
+
+  cidadeId     Int
+  cidade       Cidade @relation(fields: [cidadeId], references: [id])
+
+  avaliacoes   Avaliacao[]
+}
+
+model Avaliacao {
+  usuarioEmail      String
+  estabelecimentoId Int
+
+  nota              Int
+  comentario        String?
+
+  usuario           Usuario @relation(fields: [usuarioEmail], references: [email])
+  estabelecimento   Estabelecimento @relation(fields: [estabelecimentoId], references: [id])
+
+  @@id([usuarioEmail, estabelecimentoId])
+}
