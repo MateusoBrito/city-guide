@@ -7,6 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Tipo {
+  usuario
+  admin
+  proprietario
+}
+
 model Cidade {
   id  Int @id @default(autoincrement())
   nome  String
@@ -53,8 +59,7 @@ model Usuario {
   dataNascimento  DateTime
   criadoEm  DateTime @default(now())
 
-  ehAdministrador  Boolean @default(false)
-  ehProprietario  Boolean @default(false)
+  tipo Tipo @default(usuario)
 
   cidadeId  Int
   cidade  Cidade @relation(fields: [cidadeId], references: [id])
