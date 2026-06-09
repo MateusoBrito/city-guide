@@ -8,54 +8,73 @@ generator client {
 }
 
 model Cidade {
-  id      Int     @id @default(autoincrement())
-  nome    String
+  id  Int @id @default(autoincrement())
+  nome  String
   estado  String
-  pais    String
+  pais  String
 
-  usuarios         Usuario[]
+  usuarios  Usuario[]
   estabelecimentos Estabelecimento[]
 }
 
 model Estabelecimento {
-  id           Int    @id @default(autoincrement())
-  nome         String
-  categoria    String
-  descricao    String
+  id  Int  @id @default(autoincrement())
+  nome  String
+  categoria String
+  descricao String
+  imagemUrl String?
 
-  cep          String
-  rua          String
-  bairro       String
-  numero       String
+  cep String
+  rua String
+  bairro  String
+  numero  String
   complemento  String?
 
-  url          String?
-  telefone     String?
+  url String?
+  telefone  String?
 
-  cidadeId     Int
-  cidade       Cidade @relation(fields: [cidadeId], references: [id])
+  mediaNota Float @default(0)
+  numAvaliacoes  Int   @default(0)
+  aprovado Boolean @default(false)
+  criadoEm DateTime @default(now())
 
-  avaliacoes   Avaliacao[]
+  cidadeId  Int
+  cidade  Cidade @relation(fields: [cidadeId], references: [id])
+
+  proprietarioEmail String?
+  proprietario  Usuario? @relation(fields: [proprietarioEmail], references: [email])
+
+  avaliacoes  Avaliacao[]
 }
 
 model Usuario {
-  email        String @id
-  nome         String
+  email String @id
+  nome  String
+  dataNascimento  DateTime
+  criadoEm  DateTime @default(now())
 
-  cidadeId     Int
-  cidade       Cidade @relation(fields: [cidadeId], references: [id])
+  ehAdministrador  Boolean @default(false)
+  ehProprietario  Boolean @default(false)
 
-  avaliacoes   Avaliacao[]
+  cidadeId  Int
+  cidade  Cidade @relation(fields: [cidadeId], references: [id])
+
+  avaliacoes  Avaliacao[]
+  estabelecimentos Estabelecimento[]
 }
 
 model Avaliacao {
-  usuarioEmail      String
+  usuarioEmail  String
   estabelecimentoId Int
 
-  nota              Int
-  comentario        String?
+  nota  Int
+  comentario  String?
 
-  usuario           Usuario @relation(fields: [usuarioEmail], references: [email])
+  aprovada  Boolean @default(false)
+
+  dataAvaliacao DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioEmail], references: [email])
   estabelecimento   Estabelecimento @relation(fields: [estabelecimentoId], references: [id])
 
   @@id([usuarioEmail, estabelecimentoId])
