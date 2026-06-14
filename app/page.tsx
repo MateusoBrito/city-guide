@@ -1,28 +1,13 @@
-// app/layout.tsx
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/navbar"; 
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "City Guide",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+// app/page.tsx
+export default function Home() {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
-        <Navbar />
-        <main>
-          {children} {/* Aqui entra o conteúdo das páginas */}
-        </main>
-      </body>
-    </html>
+    <div className="p-8 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        Bem-vindo ao City Guide!
+      </h1>
+      <p className="text-gray-600">
+        Encontre os melhores estabelecimentos e avaliações da cidade.
+      </p>
+    </div>
   );
 }

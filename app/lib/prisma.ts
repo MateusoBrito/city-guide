@@ -1,3 +1,5 @@
+// app/lib/prisma.ts
+
 import { PrismaClient } from '@prisma/client'
 
 // 1. Inicializa o cliente bruto do Prisma conectado ao MySQL
