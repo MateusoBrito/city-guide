@@ -8,6 +8,7 @@ generator client {
 }
 
 enum Tipo {
+  visitante
   usuario
   admin
   proprietario
@@ -56,13 +57,13 @@ model Estabelecimento {
 model Usuario {
   email String @id
   nome  String
-  dataNascimento  DateTime
+  dataNascimento  DateTime?
   criadoEm  DateTime @default(now())
 
   tipo Tipo @default(usuario)
 
-  cidadeId  Int
-  cidade  Cidade @relation(fields: [cidadeId], references: [id])
+  cidadeId  Int?
+  cidade  Cidade? @relation(fields: [cidadeId], references: [id])
 
   avaliacoes  Avaliacao[]
   estabelecimentos Estabelecimento[]
