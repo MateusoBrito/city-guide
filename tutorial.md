@@ -7,6 +7,7 @@ Antes de iniciar, instale:
 * Node.js (versão 20 ou superior)
 * MySQL Server
 * Git
+* NextAuth
 
 ---
 
@@ -126,6 +127,12 @@ http://localhost:3000
 ---
 
 ## Comandos Úteis
+
+### Atualizar o banco com novas regras
+
+```bash
+npx prisma db push
+```
 
 ### Gerar novamente o Prisma Client
 
