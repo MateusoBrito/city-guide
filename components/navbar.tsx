@@ -67,7 +67,7 @@ export default function Navbar() {
               {dropdownAberto && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-2 z-50">
                   <button
-                    onClick={() => router.push('/edicaoPerfil')}
+                    onClick={() => router.push('/perfil')}
                     className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition flex items-center gap-3"
                   > <Users size={16} className="text-slate-400" /> Meu Perfil </button>
 

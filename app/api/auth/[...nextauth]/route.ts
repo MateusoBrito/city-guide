@@ -17,6 +17,7 @@ const handler = NextAuth({
       const usuarioExistente = await prisma.usuario.findUnique({
         where: { email: user.email },
       });
+
       if (!usuarioExistente) {
         await prisma.usuario.create({
           data: {
@@ -27,16 +28,23 @@ const handler = NextAuth({
       }
       return true;
     },
-    // Se quiser passar o tipo do usuário para a sessão do cliente igual fez no Ágora:
+
     async jwt({ token }) {
       if (token.email) {
         const dbUsuario = await prisma.usuario.findUnique({ where: { email: token.email } });
-        if (dbUsuario) token.tipo = dbUsuario.tipo;
+        if (dbUsuario) {
+          token.tipo = dbUsuario.tipo;
+          token.perfilIncompleto = !dbUsuario.cidadeId || !dbUsuario.dataNascimento;
+        }
       }
       return token;
     },
+
     async session({ session, token }: any) {
-      if (session.user) session.user.tipo = token.tipo;
+      if (session.user) {
+        session.user.tipo = token.tipo;
+        session.user.perfilIncompleto = token.perfilIncompleto;
+      }
       return session;
     }
   },

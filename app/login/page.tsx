@@ -10,6 +10,10 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
+  const handleGoogleLogin = () => {
+    signIn('google', { callbackUrl: '/' });
+  };
+
   return (
     <div className="w-full max-w-md bg-white p-8 rounded-2xl border border-slate-100 shadow-xl">
       
@@ -34,7 +38,7 @@ function LoginContent() {
       <div className="flex flex-col gap-4">
         <button 
           type="button"
-          onClick={() => signIn('google', { callbackUrl: '/' })} // Mudei para redirecionar para a Home após autenticar
+          onClick={handleGoogleLogin}
           className="w-full flex items-center justify-center gap-3 bg-white text-slate-700 font-semibold py-3 px-4 rounded-lg border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition shadow-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
@@ -55,7 +59,6 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 font-sans relative">
       
       <div className="absolute top-6 left-6">
-        {/* Hover alterado para o verde característico do seu projeto */}
         <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-[#24504F] transition font-medium">
           <ArrowLeft size={20} />
           Voltar para Home
