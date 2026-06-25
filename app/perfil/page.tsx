@@ -1,14 +1,29 @@
 "use client";
 
 import {useSession, signOut} from "next-auth/react"; // puxa os dados do usuário
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useRouter} from "next/navigation"; // redireciona o usuário
 import Link from "next/link";
+import {criarEstabelecimento} from "./actions";
+import {listarCidades} from "@/app/admin/cidades/actions"; 
 
 export default function paginaPerfil() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [abaAtiva, setAbaAtiva] = useState("dados"); // começa em meus dados
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+
+  const CATEGORIAS = [
+    "Restaurante", "Cafeteria", "Hotel", "Mercado",
+    "Bar", "Lanchonete", "Padaria", "Sorveteria", "Pizzaria", "Pousada"
+  ];
+
+  const [cidades, setCidades] = useState<any[]>([]);
+  useEffect(() => {
+    listarCidades()
+      .then((dados) => setCidades(dados || []))
+      .catch((erro) => console.error("Erro ao carregar cidades:", erro));
+  }, []);
 
   if (status === "unauthenticated") {
     router.push("/"); //volta pra raiz
@@ -103,7 +118,131 @@ export default function paginaPerfil() {
             </div>
           )}
 
-          {abaAtiva !== 'dados' && (
+          {abaAtiva === 'estabelecimentos' && (
+            <div className="bg-white p-8 rounded-xl shadow-sm border-t-4 border-[#2E948A]">
+              
+              {!mostrarFormulario ? (
+                <div className="text-center py-6">
+                  <h2 className="text-2xl font-bold text-[#24504F] mb-4">Meus Estabelecimentos</h2>
+                  <p className="text-gray-600 mb-8 max-w-lg mx-auto">
+                    Você ainda não possui nenhum estabelecimento cadastrado. Novos locais precisam ser aprovados pela nossa equipe.
+                  </p>
+                  <button 
+                    onClick={() => setMostrarFormulario(true)}
+                    className="bg-[#2E948A] hover:bg-[#24756d] text-white px-8 py-3 rounded-full font-bold transition-colors shadow-md"
+                  >
+                    + Cadastrar Novo Estabelecimento
+                  </button>
+                </div>
+              ) : (
+                <div className="animate-fade-in">
+                  <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+                    <h2 className="text-xl font-bold text-[#24504F]">Novo Estabelecimento</h2>
+                    <button 
+                      onClick={() => setMostrarFormulario(false)}
+                      className="text-sm font-semibold text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      ✕ Cancelar e fechar
+                    </button>
+                  </div>
+
+                  <form action={async (formData) => {
+                    try {
+                      await criarEstabelecimento(formData);
+                      alert("Sucesso! Seu estabelecimento foi enviado para aprovação da nossa equipe.");
+                      setMostrarFormulario(false); 
+                    } catch (error) {
+                      alert("Erro ao cadastrar. Verifique se preencheu tudo corretamente.");
+                    }
+                  }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <input type="hidden" name="proprietarioEmail" value={usuario?.email || ""} />
+    
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Nome do Local *</label>
+                      <input type="text" name="nome" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Descrição *</label>
+                      <textarea name="descricao" required rows={3} className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none resize-none"></textarea>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Categoria *</label>
+                      <select name="categoria" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none bg-white">
+                        <option value="">Selecione...</option>
+                        {CATEGORIAS.map((cat) => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Cidade *</label>
+                      <select name="cidadeId" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none bg-white">
+                        <option value="">Selecione a cidade...</option>
+                        {cidades.map((cidade) => (
+                          <option key={cidade.id} value={cidade.id}>
+                            {cidade.nome} - {cidade.estado}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">CEP *</label>
+                      <input type="text" name="cep" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Rua *</label>
+                      <input type="text" name="rua" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Bairro *</label>
+                      <input type="text" name="bairro" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                    </div>
+
+                    <div className="flex gap-2">
+                      <div className="w-1/3">
+                        <label className="block text-sm font-bold text-gray-700 mb-1">Número *</label>
+                        <input type="text" name="numero" required className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                      </div>
+                      <div className="w-2/3">
+                        <label className="block text-sm font-bold text-gray-700 mb-1">Complemento</label>
+                        <input type="text" name="complemento" className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Telefone</label>
+                      <input type="text" name="telefone" className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Site / Instagram</label>
+                      <input 
+                        type="text" 
+                        name="url" 
+                        className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" 
+                      />
+                    </div>
+
+                    <div className="md:col-span-2 mt-4">
+                      <button type="submit" className="w-full bg-[#24504F] hover:bg-[#1a3a3a] text-white font-bold p-3 rounded-md transition-colors shadow-sm">
+                        Enviar para Aprovação
+                      </button>
+                    </div>
+
+                  </form>
+                </div>
+              )}
+            </div>
+          )}
+
+          {(abaAtiva === 'favoritos' || abaAtiva === 'avaliacoes') && (
             <div className="text-center text-gray-500 py-10 bg-white rounded-xl shadow-sm">
               Nenhum registro encontrado nesta aba por enquanto.
             </div>
