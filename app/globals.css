@@ -26,6 +26,7 @@ h1, h2, h3, h4, h5, h6 {
   --primary-hover: #e2e8f0;
 
   --secondary: #24504F; /* Seu verde escuro */
+  --secondary-hover: #1e3a3a; /* Um verde ainda mais escuro para hover */
 
   /* Borders */
   --border: #e2e8f0;
@@ -33,4 +34,13 @@ h1, h2, h3, h4, h5, h6 {
   /* Fonts */
   --font-body: "Inter", sans-serif;
   --font-heading: "Poppins", sans-serif;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

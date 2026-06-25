@@ -27,14 +27,8 @@ export default function Navbar() {
           <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
             Home
           </a>
-          <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-            Projetos
-          </a>
-          <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-            Sobre
-          </a>
-          <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-            Contato
+          <a href="explore" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+            Explorar
           </a>
         </div>
 
