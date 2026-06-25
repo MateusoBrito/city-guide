@@ -27,7 +27,7 @@ export default function Navbar() {
           <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
             Home
           </a>
-          <a href="explore" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+          <a href="explorar" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
             Explorar
           </a>
         </div>
