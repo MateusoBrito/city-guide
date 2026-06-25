@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { MapPin, ChevronDown, User, Users, LogOut, LogIn } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname(); // pega a rota atual
   const router = useRouter();
   const { data: session, status } = useSession(); 
   const [dropdownAberto, setDropdownAberto] = useState(false);
@@ -24,24 +26,32 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+          <Link 
+            href="/" 
+            className={`font-semibold transition-colors ${
+              pathname === "/" ? "text-white" : "text-white/70 hover:text-white"
+            }`}
+          >
             Home
-          </a>
-          <a href="explorar" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+          </Link>  
+          <Link 
+            href="/explorar" 
+            className={`font-semibold transition-colors ${
+              pathname === "/explorar" ? "text-white" : "text-white/70 hover:text-white"
+            }`}
+          >
             Explorar
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
           
           {status !== "authenticated" ? (
-            /* CASO 1: NÃO LOGADO ou CARREGANDO -> Usa o Link nativo do Next para forçar a rota */
             <Link
               href="/login"
               className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 transition"
             >
               <LogIn size={16} />Login</Link> ) : (
-            /* CASO 2: REALMENTE LOGADO -> Mostra o Menu do Usuário */
             <div className="relative z-10" onBlur={() => setTimeout(() => setDropdownAberto(false), 200)}>
               <div 
                 onClick={() => setDropdownAberto(!dropdownAberto)}
@@ -57,7 +67,6 @@ export default function Navbar() {
                 <ChevronDown size={14} className={`text-white/70 transition-transform ${dropdownAberto ? 'rotate-180' : ''}`} />
               </div>
 
-              {/* Menu Dropdown */}
               {dropdownAberto && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-2 z-50">
                   <button

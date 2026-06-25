@@ -24,7 +24,7 @@ export default function paginaPerfil() {
   const isAdmin = session?.user?.tipo === "admin";
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pt-10">
+    <div className="min-h-screen bg-[#f8f9fa] pt-10"> 
       <div className="max-w-5xl mx-auto px-6">
         
         <div className="flex justify-between items-center bg-white p-8 rounded-t-xl shadow-sm">

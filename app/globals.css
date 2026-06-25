@@ -15,27 +15,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
-  /* Backgrounds */
   --background: #ffffff;
   --surface: #f8fafc;
 
-  /* Text */
-  --foreground: #2A2D2D; /* Cor do texto geral (quase preto) */
+  --foreground: #2A2D2D; 
   --text-on-light: #2A2D2D;
   --text-on-dark: #ffffff;
   --muted: #64748b;
 
-  /* Brand */
-  --primary: #ffffff; /* Mudado para branco para destacar o ícone no fundo verde */
+  --primary: #ffffff; 
   --primary-hover: #e2e8f0;
 
-  --secondary: #24504F; /* Seu verde escuro */
-  --secondary-hover: #1e3a3a; /* Um verde ainda mais escuro para hover */
+  --secondary: #24504F;
+  --secondary-hover: #1e3a3a; 
 
-  /* Borders */
   --border: #e2e8f0;
 
-  /* Fonts */
   --font-body: "Inter", sans-serif;
   --font-heading: "Poppins", sans-serif;
 }
