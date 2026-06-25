@@ -35,7 +35,7 @@ export default function Navbar() {
             Home
           </Link>  
           <Link 
-            href="/explore" 
+            href="/explorar" 
             className={`font-semibold transition-colors ${
               pathname === "/explorar" ? "text-white" : "text-white/70 hover:text-white"
             }`}

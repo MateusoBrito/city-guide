@@ -1,24 +1,20 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const categorias = [
-  "Todos",
-  "Restaurante",
-  "Cafeteria",
-  "Hotel",
-  "Turismo",
-  "Bar",
-  "Lanchonete",
-  "Padaria",
-  "Sorveteria",
-  "Pizzaria",
-];
+type FiltroCategoriaProps = {
+  categorias: string[];
+  categoriaSelecionada: string;
+};
 
-export default function CategoryCarousel() {
-  const [categoriaAtiva, setCategoriaAtiva] = useState("Todos");
-
+export default function FiltroCategoria({
+  categorias,
+  categoriaSelecionada,
+}: FiltroCategoriaProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollEsquerda = () => {
@@ -35,6 +31,22 @@ export default function CategoryCarousel() {
     });
   };
 
+  function atualizarCategoria(categoria: string) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (categoria === "Todos") {
+      params.delete("categoria");
+    } else {
+      params.set("categoria", categoria);
+    }
+
+    const queryString = params.toString();
+    router.replace(queryString ? `/explorar?${queryString}` : "/explorar");
+  }
+
+  const categoriasComTodos = ["Todos", ...categorias];
+  const categoriaAtiva = categoriaSelecionada || "Todos";
+
   return (
     <div className="flex items-center gap-3 w-full min-w-0">
 
@@ -49,10 +61,11 @@ export default function CategoryCarousel() {
         ref={scrollRef}
         className="flex-1 min-w-0 flex gap-3 overflow-x-auto scrollbar-hide scroll-smooth"
       >
-        {categorias.map((categoria) => (
+        {categoriasComTodos.map((categoria) => (
           <button
             key={categoria}
-            onClick={() => setCategoriaAtiva(categoria)}
+            type="button"
+            onClick={() => atualizarCategoria(categoria)}
             className={`
               whitespace-nowrap
               px-5 py-2
@@ -75,16 +88,7 @@ export default function CategoryCarousel() {
 
       <button
         onClick={scrollDireita}
-        className="
-          flex-shrink-0
-          p-2
-          rounded-full
-          bg-[var(--secondary)]
-          text-white
-          shadow-md
-          hover:bg-[var(--secondary-hover)]
-          transition
-        "
+        className="flex-shrink-0 p-2 rounded-full bg-[var(--secondary)] text-white shadow-md hover:bg-[var(--secondary-hover)] transition"
       >
         <ChevronRight size={20} />
       </button>
