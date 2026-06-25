@@ -11,7 +11,8 @@ export default function HomePage() {
   const mostrarAviso = session?.user && session.user.perfilIncompleto;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    // Ocupa a tela toda menos o espaço da navbar
+    <div className="flex flex-col min-h-[calc(100vh-64px)] bg-[#24504F]">
       
       {mostrarAviso && (
         <div className="bg-emerald-50 border-b border-emerald-200">
@@ -32,10 +33,49 @@ export default function HomePage() {
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto px-8 py-12">
-        <h1 className="text-3xl font-bold text-slate-900">Explore a Cidade</h1>
-        <p className="text-slate-500 mt-2">Encontre os melhores projetos e pontos turísticos.</p>
+      <main 
+        className="relative flex-1 flex flex-col justify-center bg-cover bg-center"
+        style={{ backgroundImage: "url('/imagem_home.webp')" }}
+      >
+        <div className="absolute inset-0 bg-black/60 z-0"></div> {/* camada escura */}
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-8 py-16">
+          
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2 drop-shadow-md">
+            Seja bem vindo(a) ao
+          </h1>
+          
+          <div className="text-6xl md:text-8xl font-extrabold tracking-tight mb-6 drop-shadow-lg">
+            <span className="text-[#2E948A]">City</span>
+            <span className="text-white">Guide</span>
+          </div>
+          
+          <p className="text-lg md:text-xl text-gray-200 max-w-2xl mb-10 leading-relaxed drop-shadow-md">
+            Encontre o local ideal para o que você precisa! Explore as avaliações, cadastre novos estabelecimentos e compartilhe suas próprias experiências com a comunidade.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link 
+              href="/explorar" 
+              className="bg-[#2E948A] hover:bg-[#24756d] text-white px-8 py-4 rounded-full font-bold text-center transition-colors shadow-lg"
+            >
+              Estabelecimentos em Destaque
+            </Link>
+            
+            <Link 
+              href="/recentes" 
+              className="bg-[#333333] hover:bg-[#222222] text-white px-8 py-4 rounded-full font-bold text-center transition-colors shadow-lg"
+            >
+              Abertos recentemente
+            </Link>
+          </div>
+
+        </div>
       </main>
+
+      <footer className="bg-[#24504F] text-center py-4 text-white/80 text-sm">
+        <p>© 2026 CityGuide - Guia de Turismo.</p>
+      </footer>
 
     </div>
   );

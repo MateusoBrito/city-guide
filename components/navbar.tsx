@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { MapPin, ChevronDown, User, Users, LogOut, LogIn } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname(); // pega a rota atual
   const router = useRouter();
   const { data: session, status } = useSession(); 
   const [dropdownAberto, setDropdownAberto] = useState(false);
@@ -24,12 +26,22 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+          <Link 
+            href="/" 
+            className={`font-semibold transition-colors ${
+              pathname === "/" ? "text-white" : "text-white/70 hover:text-white"
+            }`}
+          >
             Home
-          </a>
-          <a href="explore" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
+          </Link>  
+          <Link 
+            href="/explore" 
+            className={`font-semibold transition-colors ${
+              pathname === "/explorar" ? "text-white" : "text-white/70 hover:text-white"
+            }`}
+          >
             Explorar
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
