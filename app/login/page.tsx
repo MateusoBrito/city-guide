@@ -18,7 +18,6 @@ function LoginContent() {
     <div className="w-full max-w-md bg-white p-8 rounded-2xl border border-slate-100 shadow-xl">
       
       <div className="flex flex-col items-center mb-8 text-center">
-        {/* Ícone adaptado para o verde do tema turístico */}
         <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
           <MapPin className="w-6 h-6 text-[#24504F]" />
         </div>

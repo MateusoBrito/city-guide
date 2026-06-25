@@ -35,13 +35,11 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           
           {status !== "authenticated" ? (
-            /* CASO 1: NÃO LOGADO ou CARREGANDO -> Usa o Link nativo do Next para forçar a rota */
             <Link
               href="/login"
               className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 transition"
             >
               <LogIn size={16} />Login</Link> ) : (
-            /* CASO 2: REALMENTE LOGADO -> Mostra o Menu do Usuário */
             <div className="relative z-10" onBlur={() => setTimeout(() => setDropdownAberto(false), 200)}>
               <div 
                 onClick={() => setDropdownAberto(!dropdownAberto)}
@@ -57,7 +55,6 @@ export default function Navbar() {
                 <ChevronDown size={14} className={`text-white/70 transition-transform ${dropdownAberto ? 'rotate-180' : ''}`} />
               </div>
 
-              {/* Menu Dropdown */}
               {dropdownAberto && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-2 z-50">
                   <button

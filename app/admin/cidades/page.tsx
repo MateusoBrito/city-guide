@@ -1,10 +1,9 @@
-// app/admin/cidades/page.tsx
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { criarCidade, listarCidades } from "./actions";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {criarCidade, listarCidades} from "./actions";
 
 export default function GerenciarCidadesPage() {
   const { data: session, status } = useSession();
@@ -12,22 +11,17 @@ export default function GerenciarCidadesPage() {
   const [cidades, setCidades] = useState<any[]>([]);
   const [carregandoCidades, setCarregandoCidades] = useState(true);
 
-  // Efeito 1: Cuida APENAS da segurança (Redirecionamento)
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
     } else if (status === "authenticated") {
-      // @ts-ignore
-      if (session?.user?.tipo !== "admin") {
+      if (session?.user?.tipo !== "admin") { // se n for admin
         router.push("/perfil");
       }
     }
   }, [status, session, router]);
 
-  // Efeito 2: Cuida APENAS de buscar as cidades
   useEffect(() => {
-    // Só busca as cidades se a pessoa já estiver logada como admin
-    // @ts-ignore
     if (status === "authenticated" && session?.user?.tipo === "admin") {
       listarCidades()
         .then((dados) => {
@@ -41,13 +35,10 @@ export default function GerenciarCidadesPage() {
     }
   }, [status, session]);
 
-  // Tela de bloqueio super rápida apenas enquanto o Google decide quem é você
   if (status === "loading") {
     return <div className="p-10 text-center text-xl font-bold text-[#004d4d]">Carregando painel...</div>;
   }
 
-  // Se chegou aqui e não é admin, não mostra a tela (o router já vai empurrar pra fora)
-  // @ts-ignore
   if (session?.user?.tipo !== "admin") return null; 
 
   return (
@@ -57,13 +48,12 @@ export default function GerenciarCidadesPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          {/* Formulário de Cadastro SEMPRE APARECE */}
           <div className="bg-white p-6 rounded-xl shadow-sm h-fit border-t-4 border-[#2E948A]">
             <h2 className="text-xl font-bold text-[#24504F] mb-4">Nova Cidade</h2>
             
             <form action={async (formData) => {
               try {
-                setCarregandoCidades(true); // Gira a rodinha da tabela
+                setCarregandoCidades(true); 
                 await criarCidade(formData);
                 const dadosAtualizados = await listarCidades();
                 setCidades(dadosAtualizados);
@@ -72,7 +62,7 @@ export default function GerenciarCidadesPage() {
               } catch (error) {
                 alert("Erro ao cadastrar a cidade. Verifique os dados.");
               } finally {
-                setCarregandoCidades(false); // Para a rodinha
+                setCarregandoCidades(false);
               }
             }} id="cidade-form" className="flex flex-col gap-4">
               
@@ -83,7 +73,7 @@ export default function GerenciarCidadesPage() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Estado</label>
-                <input type="text" name="estado" required placeholder="Ex: MG" maxLength={2} className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none text-gray-800 uppercase" />
+                <input type="text" name="estado" required placeholder="Ex: MG" maxLength={2} className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none text-gray-800" />
               </div>
 
               <div>
@@ -97,7 +87,6 @@ export default function GerenciarCidadesPage() {
             </form>
           </div>
 
-          {/* Listagem das Cidades */}
           <div className="md:col-span-2 bg-white p-6 rounded-xl shadow-sm border-t-4 border-[#24504F]">
             <h2 className="text-xl font-bold text-[#24504F] mb-4">Cidades Ativas no Sistema</h2>
             

@@ -4,7 +4,7 @@ import {prisma} from "@/app/lib/prisma";
 import {revalidatePath} from "next/cache";
 
 export async function criarCidade(formData: FormData) {
-  const nome = formData.get("nome") as string;
+  const nome = formData.get("nome") as string; // formData vem do html
   const estado = formData.get("estado") as string;
   const pais = formData.get("pais") as string;
 
