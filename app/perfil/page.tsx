@@ -58,7 +58,7 @@ export default function paginaPerfil() {
                 href="/admin/cidades"
                 className="bg-[#004d4d] hover:bg-[#003333] text-white px-5 py-2.5 rounded-md font-medium transition-colors flex items-center"
               >
-                Painel Admin (Cidades)
+                Painel Admin
               </Link>
             )}
             <button 
@@ -146,17 +146,33 @@ export default function paginaPerfil() {
                     </button>
                   </div>
 
-                  <form action={async (formData) => {
-                    try {
-                      await criarEstabelecimento(formData);
-                      alert("Sucesso! Seu estabelecimento foi enviado para aprovação da nossa equipe.");
-                      setMostrarFormulario(false); 
-                    } catch (error) {
-                      alert("Erro ao cadastrar. Verifique se preencheu tudo corretamente.");
-                    }
-                  }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    
+                  <form 
+                    action={async (formData) => {
+                      try {
+                        await criarEstabelecimento(formData);
+                        alert("Sucesso! Seu estabelecimento foi enviado para aprovação da nossa equipe.");
+                        setMostrarFormulario(false); 
+                      } catch (error: any) {
+                        alert(error.message || "Erro desconhecido ao cadastrar.");
+                      }
+                    }} 
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                  >
+                                      
                     <input type="hidden" name="proprietarioEmail" value={usuario?.email || ""} />
+                    
+                    <div className="md:col-span-2 bg-slate-50 p-4 rounded-md border border-dashed border-gray-300">
+                      <label className="block text-sm font-bold text-gray-700 mb-1">
+                        Foto de Capa do Estabelecimento
+                      </label>
+                      <input 
+                        type="file" 
+                        name="imagem" 
+                        accept="image/*"
+                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E948A]/10 file:text-[#2E948A] hover:file:bg-[#2E948A]/20 cursor-pointer"
+                      />
+                      <p className="text-xs text-gray-400 mt-1">Selecione uma foto nítida e bem iluminada do local.</p>
+                    </div>
     
                     <div className="md:col-span-2">
                       <label className="block text-sm font-bold text-gray-700 mb-1">Nome do Local *</label>
@@ -230,13 +246,13 @@ export default function paginaPerfil() {
                       />
                     </div>
 
-                    <div className="md:col-span-2 mt-4">
-                      <button type="submit" className="w-full bg-[#24504F] hover:bg-[#1a3a3a] text-white font-bold p-3 rounded-md transition-colors shadow-sm">
-                        Enviar para Aprovação
-                      </button>
-                    </div>
+                      <div className="md:col-span-2 mt-4">
+                        <button type="submit" className="w-full bg-[#24504F] hover:bg-[#1a3a3a] text-white font-bold p-3 rounded-md transition-colors shadow-sm">
+                          Enviar para Aprovação
+                        </button>
+                      </div>
 
-                  </form>
+                    </form>
                 </div>
               )}
             </div>
