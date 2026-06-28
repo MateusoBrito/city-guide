@@ -28,6 +28,43 @@ async function main() {
     },
   });
 
+  const listaUsuarios = [
+    {
+      email: "estermariasouza2005@gmail.com",
+      nome: "Ester",
+      tipo: "admin",
+      cidadeId: saoJoaoDelRei.id,
+    },
+    {
+      email: "mateusdeoliveirabritoo@gmail.com",
+      nome: "Mateus",
+      tipo: "usuario",
+      cidadeId: saoJoaoDelRei.id,
+    },
+    {
+      email: "estermariasouza2005@aluno.ufsj.edu.br",
+      nome: "Ester",
+      tipo: "admin",
+      cidadeId: saoJoaoDelRei.id,
+    },
+    {
+      email: "carlos.visitante@yahoo.com",
+      nome: "Carlos Visitante",
+      tipo: "visitante",
+      // Sem cidadeId para testar usuários com perfil incompleto
+    },
+  ];
+
+  for (const user of listaUsuarios) {
+    await prisma.usuario.upsert({
+      where: { email: user.email }, // Busca pelo email, que é o @id
+      update: {}, // Se já existir, não faz nada
+      create: user, // Se não existir, cria
+    });
+  }
+
+  console.log("Usuários de teste inseridos com sucesso!");
+
   const estabelecimentos = [
     {
       id: 1,
