@@ -2,7 +2,7 @@
 
 import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
-import fs from "node:fs/promises";
+import fs from "node:fs/promises"; 
 import path from "node:path";
 
 export async function criarEstabelecimento(formData: FormData) {
@@ -31,23 +31,19 @@ export async function criarEstabelecimento(formData: FormData) {
   const cidadeId = parseInt(cidadeIdString);
   let imagemUrl: string | null = null;
 
-  // Lógica para processar e salvar o arquivo
   if (arquivoImagem && arquivoImagem.size > 0 && arquivoImagem.name !== "undefined") {
     try {
-      // 1. Validação de tamanho máximo (Ex: Bloquear se for maior que 4MB)
       const limiteTamanho = 4 * 1024 * 1024; // 4MB
       if (arquivoImagem.size > limiteTamanho) {
         throw new Error("A imagem é muito grande. O limite máximo é 4MB.");
       }
 
-      // 2. Transforma em buffer de forma simplificada
       const arrayBuffer = await arquivoImagem.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
       const pastaUploads = path.join(process.cwd(), "public", "uploads");
       await fs.mkdir(pastaUploads, { recursive: true });
 
-      // Normaliza o nome removendo caracteres especiais
       const nomeLimpo = arquivoImagem.name.replace(/[^a-zA-Z0-0.]/g, "_");
       const nomeArquivoUnico = `${Date.now()}-${nomeLimpo}`;
       const caminhoCompletoDoArquivo = path.join(pastaUploads, nomeArquivoUnico);
@@ -61,7 +57,6 @@ export async function criarEstabelecimento(formData: FormData) {
     }
   }
 
-  // Salvando no banco de dados com a nova URL de imagem
   await prisma.estabelecimento.create({
     data: {
       nome,
@@ -81,4 +76,71 @@ export async function criarEstabelecimento(formData: FormData) {
   });
 
   revalidatePath("/perfil");
+}
+
+export async function listarMeusEstabelecimentos(email: string) {
+  if (!email) return [];
+  return await prisma.estabelecimento.findMany({
+    where: { proprietarioEmail: email },
+    include: { cidade: true },
+    orderBy: { criadoEm: "desc" },
+  });
+}
+
+export async function deletarMeuEstabelecimento(id: number, email: string) {
+  if (!id || !email) throw new Error("Dados inválidos.");
+
+  const estabelecimento = await prisma.estabelecimento.findUnique({ where: { id } });
+  
+  if (estabelecimento?.proprietarioEmail !== email) {
+    throw new Error("Você não tem permissão para excluir este estabelecimento.");
+  }
+
+  await prisma.estabelecimento.delete({ where: { id } });
+  
+  revalidatePath("/perfil/estabelecimentos");
+  revalidatePath("/admin/estabelecimentos");
+}
+
+export async function editarEstabelecimento(id: number, formData: FormData, email: string) {
+  const nome = formData.get("nome") as string;
+  const descricao = formData.get("descricao") as string;
+  const categoria = formData.get("categoria") as string;
+  const cep = formData.get("cep") as string;
+  const rua = formData.get("rua") as string;
+  const bairro = formData.get("bairro") as string;
+  const numero = formData.get("numero") as string;
+  const complemento = formData.get("complemento") as string;
+  const telefone = formData.get("telefone") as string;
+  const url = formData.get("url") as string;
+  const cidadeIdString = formData.get("cidadeId") as string;
+
+  const estabelecimento = await prisma.estabelecimento.findUnique({ where: { id } });
+  if (estabelecimento?.proprietarioEmail !== email) {
+    throw new Error("Você não tem permissão para alterar este estabelecimento.");
+  }
+
+  const cidadeId = parseInt(cidadeIdString);
+
+  await prisma.estabelecimento.update({
+    where: { id },
+    data: {
+      nome,
+      descricao,
+      categoria,
+      cep,
+      rua,
+      bairro,
+      numero,
+      complemento,
+      telefone,
+      url,
+      cidadeId,
+      aprovado: false, 
+    },
+  });
+
+  revalidatePath("/perfil/estabelecimentos");
+  revalidatePath("/admin/estabelecimentos");
+  revalidatePath("/explorar");
 }
