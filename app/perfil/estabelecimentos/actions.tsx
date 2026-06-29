@@ -13,6 +13,8 @@ export async function criarEstabelecimento(formData: FormData) {
   const rua = formData.get("rua") as string;
   const bairro = formData.get("bairro") as string;
   const numero = formData.get("numero") as string;
+  const latitudeString = formData.get("latitude") as string;
+  const longitudeString = formData.get("longitude") as string;
   
   // Opcionais
   const complemento = formData.get("complemento") as string;
@@ -29,11 +31,13 @@ export async function criarEstabelecimento(formData: FormData) {
   }
 
   const cidadeId = parseInt(cidadeIdString);
+  const latitude = latitudeString ? parseFloat(latitudeString) : null;
+  const longitude = longitudeString ? parseFloat(longitudeString) : null;
   let imagemUrl: string | null = null;
 
   if (arquivoImagem && arquivoImagem.size > 0 && arquivoImagem.name !== "undefined") {
     try {
-      const limiteTamanho = 4 * 1024 * 1024; // 4MB
+      const limiteTamanho = 5 * 1024 * 1024; // 5MB
       if (arquivoImagem.size > limiteTamanho) {
         throw new Error("A imagem é muito grande. O limite máximo é 4MB.");
       }
@@ -72,6 +76,8 @@ export async function criarEstabelecimento(formData: FormData) {
       cidadeId,
       proprietarioEmail,
       imagemUrl,
+      latitude,
+      longitude,
     },
   });
 
@@ -114,13 +120,34 @@ export async function editarEstabelecimento(id: number, formData: FormData, emai
   const telefone = formData.get("telefone") as string;
   const url = formData.get("url") as string;
   const cidadeIdString = formData.get("cidadeId") as string;
+  const latitudeString = formData.get("latitude") as string;
+  const longitudeString = formData.get("longitude") as string;
+  
+  const arquivoImagem = formData.get("imagem") as File | null;
 
   const estabelecimento = await prisma.estabelecimento.findUnique({ where: { id } });
   if (estabelecimento?.proprietarioEmail !== email) {
     throw new Error("Você não tem permissão para alterar este estabelecimento.");
   }
 
+  let imagemUrl = estabelecimento.imagemUrl; 
+
+  if (arquivoImagem && arquivoImagem.size > 0 && arquivoImagem.name !== "undefined") {
+    const arrayBuffer = await arquivoImagem.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const pastaUploads = path.join(process.cwd(), "public", "uploads");
+    await fs.mkdir(pastaUploads, { recursive: true });
+    
+    const nomeLimpo = arquivoImagem.name.replace(/[^a-zA-Z0-9.]/g, "_");
+    const nomeArquivoUnico = `${Date.now()}-${nomeLimpo}`;
+    await fs.writeFile(path.join(pastaUploads, nomeArquivoUnico), buffer);
+    
+    imagemUrl = `/uploads/${nomeArquivoUnico}`;
+  }
+
   const cidadeId = parseInt(cidadeIdString);
+  const latitude = latitudeString ? parseFloat(latitudeString) : null;
+  const longitude = longitudeString ? parseFloat(longitudeString) : null;
 
   await prisma.estabelecimento.update({
     where: { id },
@@ -136,7 +163,10 @@ export async function editarEstabelecimento(id: number, formData: FormData, emai
       telefone,
       url,
       cidadeId,
-      aprovado: false, 
+      imagemUrl, 
+      aprovado: false,
+      latitude,
+      longitude, 
     },
   });
 
