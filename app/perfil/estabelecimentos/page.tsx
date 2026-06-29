@@ -175,6 +175,23 @@ export default function EstabelecimentosPage() {
           >
             <input type="hidden" name="proprietarioEmail" value={usuario?.email || ""} />
             
+            <div className="md:col-span-2 bg-slate-50 p-4 rounded-md border border-dashed border-gray-300">
+              <label className="block text-sm font-bold text-gray-700 mb-1">
+                {localParaEditar ? "Alterar Foto de Capa (opcional)" : "Foto de Capa do Estabelecimento"}
+              </label>
+              <input 
+                type="file" 
+                name="imagem" 
+                accept="image/*"
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E948A]/10 file:text-[#2E948A] hover:file:bg-[#2E948A]/20 cursor-pointer"
+              />
+              {localParaEditar?.imagemUrl && (
+                <p className="text-xs text-emerald-600 mt-2 font-medium">
+                  * Já existe uma foto cadastrada. Se você não selecionar outra, a atual será mantida.
+                </p>
+              )}
+            </div>
+
             <div className="md:col-span-2">
               <label className="block text-sm font-bold text-gray-700 mb-1">Nome do Local *</label>
               <input type="text" name="nome" required defaultValue={localParaEditar?.nome || ""} className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />

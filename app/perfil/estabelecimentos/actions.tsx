@@ -114,10 +114,27 @@ export async function editarEstabelecimento(id: number, formData: FormData, emai
   const telefone = formData.get("telefone") as string;
   const url = formData.get("url") as string;
   const cidadeIdString = formData.get("cidadeId") as string;
+  
+  const arquivoImagem = formData.get("imagem") as File | null;
 
   const estabelecimento = await prisma.estabelecimento.findUnique({ where: { id } });
   if (estabelecimento?.proprietarioEmail !== email) {
     throw new Error("Você não tem permissão para alterar este estabelecimento.");
+  }
+
+  let imagemUrl = estabelecimento.imagemUrl; 
+
+  if (arquivoImagem && arquivoImagem.size > 0 && arquivoImagem.name !== "undefined") {
+    const arrayBuffer = await arquivoImagem.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const pastaUploads = path.join(process.cwd(), "public", "uploads");
+    await fs.mkdir(pastaUploads, { recursive: true });
+    
+    const nomeLimpo = arquivoImagem.name.replace(/[^a-zA-Z0-9.]/g, "_");
+    const nomeArquivoUnico = `${Date.now()}-${nomeLimpo}`;
+    await fs.writeFile(path.join(pastaUploads, nomeArquivoUnico), buffer);
+    
+    imagemUrl = `/uploads/${nomeArquivoUnico}`;
   }
 
   const cidadeId = parseInt(cidadeIdString);
@@ -136,6 +153,7 @@ export async function editarEstabelecimento(id: number, formData: FormData, emai
       telefone,
       url,
       cidadeId,
+      imagemUrl, 
       aprovado: false, 
     },
   });
