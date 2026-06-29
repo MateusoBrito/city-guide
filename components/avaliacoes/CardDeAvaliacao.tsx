@@ -1,4 +1,4 @@
-import RatingStars from "./EstrelasDeAvaliacao";
+import EstrelasDeAvaliacao from "./EstrelasDeAvaliacao";
 
 type CardDeAvaliacaoProps = {
   nome: string;
@@ -22,7 +22,7 @@ export default function CardDeAvaliacao({
           <h3 className="font-bold text-[#24504F]">{nome}</h3>
           <p className="text-xs text-slate-500">{dataFormatada}</p>
         </div>
-        <RatingStars value={nota} readOnly size={18} />
+        <EstrelasDeAvaliacao value={nota} readOnly size={18} />
       </div>
 
       {comentario ? (

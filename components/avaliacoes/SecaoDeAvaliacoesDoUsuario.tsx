@@ -15,7 +15,7 @@ import type {
 import EstrelasDeAvaliacao from "./EstrelasDeAvaliacao";
 import CardDeAvaliacao from "./CardDeAvaliacao";
 
-type UserReviewSectionProps = {
+type SecaoDeAvaliacoesDoUsuarioProps = {
   estabelecimentoId: number;
   usuarioLogado: boolean;
   initialSummary: ReviewSummary;
@@ -23,11 +23,11 @@ type UserReviewSectionProps = {
 
 type Modo = "criacao" | "visualizacao" | "edicao" | "confirmacao";
 
-export default function UserReviewSection({
+export default function SecaoDeAvaliacoesDoUsuario({
   estabelecimentoId,
   usuarioLogado,
   initialSummary,
-}: UserReviewSectionProps) {
+}: SecaoDeAvaliacoesDoUsuarioProps) {
   const [summary, setSummary] = useState(initialSummary);
   const [modo, setModo] = useState<Modo>(
     initialSummary.minhaAvaliacao ? "visualizacao" : "criacao",

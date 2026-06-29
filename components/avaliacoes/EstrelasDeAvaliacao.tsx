@@ -2,19 +2,19 @@
 
 import { Star } from "lucide-react";
 
-type RatingStarsProps = {
+type EstrelasDeAvaliacaoProps = {
   value: number;
   onChange?: (value: number) => void;
   readOnly?: boolean;
   size?: number;
 };
 
-export default function RatingStars({
+export default function EstrelasDeAvaliacao({
   value,
   onChange,
   readOnly = false,
   size = 22,
-}: RatingStarsProps) {
+}: EstrelasDeAvaliacaoProps) {
   return (
     <div className="flex items-center gap-1" aria-label={`${value} de 5 estrelas`}>
       {[1, 2, 3, 4, 5].map((nota) => {
