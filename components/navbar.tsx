@@ -18,7 +18,7 @@ export default function Navbar() {
   return (
     <nav
       className="h-16" style={{ backgroundColor: "var(--secondary)"}}>
-      <div className="max-w-7xl mx-auto h-full px-8 flex items-center justify-between">
+      <div className="w-full mx-auto h-full px-6 flex items-center justify-between">
 
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
           <MapPin className="w-8 h-8 text-white fill-white/10" />

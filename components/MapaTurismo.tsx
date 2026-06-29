@@ -83,7 +83,7 @@ export default function MapaTurismo({ latitudeCidade, longitudeCidade, estabelec
     <div className="w-full h-full min-h-[450px] rounded-xl overflow-hidden border-2 border-slate-200 relative z-10">
       <MapContainer center={centroCidade} zoom={14} className="w-full h-full">
         <TileLayer
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         <MoverCameraMapa centro={centroCidade} />
