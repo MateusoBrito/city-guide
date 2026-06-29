@@ -22,6 +22,9 @@ model Cidade {
 
   usuarios  Usuario[]
   estabelecimentos Estabelecimento[]
+
+  latitude  Float @default(0.0)
+  longitude  Float @default(0.0)
 }
 
 model Estabelecimento {
@@ -39,6 +42,9 @@ model Estabelecimento {
 
   url String?
   telefone  String?
+
+  latitude  Float?
+  longitude  Float?
 
   mediaNota Float @default(0)
   numAvaliacoes  Int   @default(0)

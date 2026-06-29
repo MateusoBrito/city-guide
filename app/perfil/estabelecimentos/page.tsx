@@ -10,6 +10,7 @@ import {
 } from "./actions"; 
 import { listarCidades } from "@/app/admin/cidades/actions"; 
 import { Pencil, Trash2, Clock, CheckCircle } from "lucide-react";
+import dynamic from "next/dynamic";
 
 const CATEGORIAS = [
   "Restaurante", "Cafeteria", "Hotel", "Mercado",
@@ -26,6 +27,11 @@ export default function EstabelecimentosPage() {
   
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [localParaEditar, setLocalParaEditar] = useState<any | null>(null);
+
+  const MapaSeletor = dynamic(() => import("@/components/MapaSeletor"), {
+    ssr: false,
+    loading: () => <div className="h-[280px] bg-slate-100 animate-pulse rounded-xl flex items-center justify-center text-sm text-gray-400">Carregando mapa seletor...</div>
+  });
 
   // Carrega os dados iniciais
   const carregarDados = async () => {
@@ -225,6 +231,14 @@ export default function EstabelecimentosPage() {
                 <label className="block text-sm font-bold text-gray-700 mb-1">Complemento</label>
                 <input type="text" name="complemento" defaultValue={localParaEditar?.complemento || ""} className="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2E948A] outline-none" />
               </div>
+            </div>
+
+            <div className="md:col-span-2 mt-2">
+              <label className="block text-sm font-bold text-gray-700 mb-2">Localização no Mapa</label>
+              <MapaSeletor 
+                latPadrao={localParaEditar?.latitude ? parseFloat(localParaEditar.latitude) : undefined}
+                lngPadrao={localParaEditar?.longitude ? parseFloat(localParaEditar.longitude) : undefined}
+              />
             </div>
 
             <div>

@@ -1,8 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth"; // Adicionamos o tipo por garantia
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/app/lib/prisma";
 
-const handler = NextAuth({
+// 1. Extraímos as configurações para uma constante exportável 🎯
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -48,6 +49,9 @@ const handler = NextAuth({
     }
   },
   session: { strategy: "jwt" }
-});
+};
+
+// 2. O handler continua igual, apenas consumindo a constante acima
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
