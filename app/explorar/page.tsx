@@ -88,35 +88,37 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
   }));
 
   return (
-    <div className="mx-auto max-w-7xl px-8 py-8 space-y-4 h-screen flex flex-col">
-      {/* Busca */}
-      <section>
-        <BarraDeBusca
-          termoBusca={termoBusca}
-          cidadeSelecionada={cidadeIdValida ? cidadeSelecionada : ""}
-          categoriaSelecionada={categoriaSelecionada}
-        />
-      </section>
+    /* 🛠️ ALTERADO: w-full e max-w-none removem as barras brancas laterais. 
+       px-4 e py-4 deixam os cantos mais próximos das bordas do monitor */
+    <div className="w-full max-w-none px-4 py-4 space-y-4 h-[calc(100vh-64px)] flex flex-col overflow-hidden">
+      
+      {/* Container Superior: Barra de Busca + Filtros alinhados em linha fluida */}
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between bg-white p-2 rounded-xl shadow-sm border border-slate-100">
+        <div className="flex-1 min-w-0">
+          <BarraDeBusca
+            termoBusca={termoBusca}
+            cidadeSelecionada={cidadeIdValida ? cidadeSelecionada : ""}
+            categoriaSelecionada={categoriaSelecionada}
+          />
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 min-w-0">
+          <FiltroCidade
+            cidades={cidades}
+            cidadeSelecionada={cidadeIdValida ? cidadeSelecionada : ""}
+          />
+          <FiltroCategoria
+            categorias={categorias}
+            categoriaSelecionada={categoriaSelecionada}
+          />
+        </div>
+      </div>
 
-      {/* Filtros */}
-      <section className="flex flex-col min-w-0 md:flex-row gap-4">
-        <FiltroCidade
-          cidades={cidades}
-          cidadeSelecionada={cidadeIdValida ? cidadeSelecionada : ""}
-        />
-        <FiltroCategoria
-          categorias={categorias}
-          categoriaSelecionada={categoriaSelecionada}
-        />
-      </section>
-
-      {/* LAYOUT SPLIT-SCREEN COM MAPA MAIOR 🎯 */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-0 overflow-hidden pt-2">
+      {/* LAYOUT SPLIT-SCREEN FLUIDO (Ocupando todo o espaço restante) */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-0 overflow-hidden">
         
-        {/* Coluna da Esquerda: Ocupa 2 de 5 colunas (antes ocupava 3) */}
-        <section className="lg:col-span-2 overflow-y-auto pr-2 h-full space-y-4 scrollbar-thin">
-          {/* Mudado aqui: tiramos o md:grid-cols-2 para fixar apenas 1 coluna de cards */}
-          <div className="grid grid-cols-1 gap-6">
+        {/* Coluna da Esquerda: Cards (Ocupa 4 de 12 partes da largura ~ 33%) */}
+        <section className="lg:col-span-4 overflow-y-auto pr-1 h-full space-y-4 scrollbar-thin">
+          <div className="grid grid-cols-1 gap-4">
             {estabelecimentos.length === 0 ? (
               <p className="text-center text-[var(--text-on-light)] text-lg mt-10">
                 {termoBusca
@@ -137,8 +139,8 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
           </div>
         </section>
 
-        {/* Coluna da Direita: Agora assume 3 de 5 colunas (o mapa ganhou muito mais largura!) */}
-        <section className="hidden lg:block lg:col-span-3 h-full rounded-xl overflow-hidden sticky top-0">
+        {/* Coluna da Direita: Mapa Gigante (Ocupa 8 de 12 partes da largura ~ 66%) */}
+        <section className="hidden lg:block lg:col-span-8 h-full rounded-xl overflow-hidden relative">
           <MapaExplorarClient
             latitudeCidade={latCidade}
             longitudeCidade={lngCidade}
