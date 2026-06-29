@@ -52,6 +52,8 @@ model Estabelecimento {
   proprietario  Usuario? @relation(fields: [proprietarioEmail], references: [email])
 
   avaliacoes  Avaliacao[]
+
+  favoritadoPor Usuario[] @relation("UsuarioFavoritos")
 }
 
 model Usuario {
@@ -67,6 +69,8 @@ model Usuario {
 
   avaliacoes  Avaliacao[]
   estabelecimentos Estabelecimento[]
+
+  favoritos Estabelecimento[] @relation("UsuarioFavoritos")
 }
 
 model Avaliacao {
