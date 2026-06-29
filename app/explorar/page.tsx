@@ -127,6 +127,7 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
               estabelecimentos.map((estabelecimento) => (
                 <CardEstabelecimento
                   key={estabelecimento.id}
+                  id={estabelecimento.id}
                   nome={estabelecimento.nome}
                   categoria={estabelecimento.categoria}
                   avaliacao={estabelecimento.mediaNota}
