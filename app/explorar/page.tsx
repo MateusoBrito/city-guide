@@ -2,7 +2,7 @@ import FiltroCategoria from "@/components/FiltroCategoria";
 import CardEstabelecimento from "@/components/CardEstabelecimento";
 import BarraDeBusca from "@/components/BarraDeBusca";
 import FiltroCidade from "@/components/FiltroCidade";
-import prisma from "@/app/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import MapaExplorarClient from "@/components/MapaExplorarClient";
 
 type PaginaExplorarProps = {
@@ -129,6 +129,7 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
               estabelecimentos.map((estabelecimento) => (
                 <CardEstabelecimento
                   key={estabelecimento.id}
+                  id={estabelecimento.id}
                   nome={estabelecimento.nome}
                   categoria={estabelecimento.categoria}
                   avaliacao={estabelecimento.mediaNota}

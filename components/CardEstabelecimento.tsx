@@ -1,6 +1,10 @@
 import { Heart, Check, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import EstrelasDeAvaliacao from "@/components/avaliacoes/EstrelasDeAvaliacao";
 
 type CardEstabelecimentoProps = {
+  id?: number;
   nome?: string;
   categoria?: string;
   avaliacao?: number;
@@ -12,6 +16,7 @@ type CardEstabelecimentoProps = {
 };
 
 export default function CardEstabelecimento({
+  id,
   nome = "Nome do Estabelecimento",
   categoria = "Categoria",
   avaliacao = 4,
@@ -46,11 +51,9 @@ export default function CardEstabelecimento({
           )}
         </div>
 
-        <img
-          src={imagem}
-          alt={nome}
-          className="w-full h-40 object-cover rounded-lg my-2"
-        />
+        <div className="relative my-2 h-40 w-full overflow-hidden rounded-lg">
+          <Image src={imagem} alt={nome} fill className="object-cover" />
+        </div>
 
         {/* Se for admin, exibe a descrição do estabelecimento enviado */}
         {isAdmin && descricao && (
@@ -72,10 +75,20 @@ export default function CardEstabelecimento({
                 {"★".repeat(estrelasCheias)}
                 {"☆".repeat(estrelasVazias)}
               </p>
+              
             </div>
-            <button className="bg-[var(--secondary)] text-[var(--text-on-dark)] px-4 py-2 rounded-lg shadow-lg hover:bg-[var(--secondary-hover)] transition-colors text-sm font-semibold">
-              Ver Detalhes
-            </button>
+            {id ? (
+              <Link
+                href={`/estabelecimentos/${id}`}
+                className="bg-[var(--secondary)] text-[var(--text-on-dark)] px-4 py-2 rounded-lg shadow-lg hover:bg-[var(--secondary-hover)] transition-colors text-sm font-semibold"
+              >
+                Ver Detalhes
+              </Link>
+            ) : (
+              <button className="bg-[var(--secondary)] text-[var(--text-on-dark)] px-4 py-2 rounded-lg shadow-lg hover:bg-[var(--secondary-hover)] transition-colors text-sm font-semibold">
+                Ver Detalhes
+              </button>
+            )}
           </>
         ) : (
           /* Layout de Ações do Administrador */
