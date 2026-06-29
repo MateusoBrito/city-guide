@@ -2,7 +2,7 @@ import FiltroCategoria from "@/components/FiltroCategoria";
 import CardEstabelecimento from "@/components/CardEstabelecimento";
 import BarraDeBusca from "@/components/BarraDeBusca";
 import FiltroCidade from "@/components/FiltroCidade";
-import prisma from "@/app/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import MapaExplorarClient from "@/components/MapaExplorarClient";
 
 type PaginaExplorarProps = {
