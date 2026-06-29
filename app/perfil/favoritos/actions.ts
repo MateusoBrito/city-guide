@@ -3,7 +3,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-// Função para listar os favoritos do usuário
 export async function listarFavoritos(email: string) {
   const usuario = await prisma.usuario.findUnique({
     where: { email },
@@ -12,7 +11,6 @@ export async function listarFavoritos(email: string) {
   return usuario?.favoritos || [];
 }
 
-// Função para alternar (adicionar/remover) favorito
 export async function alternarFavorito(email: string, estabelecimentoId: number) {
   if (!email) throw new Error("Usuário não autenticado.");
 
@@ -36,5 +34,5 @@ export async function alternarFavorito(email: string, estabelecimentoId: number)
   }
 
   revalidatePath("/perfil/favoritos");
-  revalidatePath("/explorar"); // Opcional: para atualizar o coração nos cards da tela explorar
+  revalidatePath("/explorar"); 
 }
