@@ -3,13 +3,20 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+  // 1. Criação/Atualização das Cidades com Coordenadas Centrais Reais
   const ouroPreto = await prisma.cidade.upsert({
     where: { id: 1 },
-    update: {},
+    update: {
+      latitude: -20.3856,
+      longitude: -43.5035,
+    },
     create: {
+      id: 1,
       nome: "Ouro Preto",
       estado: "MG",
       pais: "Brasil",
+      latitude: -20.3856,
+      longitude: -43.5035,
     },
   });
 
@@ -19,15 +26,20 @@ async function main() {
       nome: "Sao Joao del-Rei",
       estado: "MG",
       pais: "Brasil",
+      latitude: -21.1356,
+      longitude: -44.2612,
     },
     create: {
       id: 2,
       nome: "Sao Joao del-Rei",
       estado: "MG",
       pais: "Brasil",
+      latitude: -21.1356,
+      longitude: -44.2612,
     },
   });
 
+  // 2. Inserção de Usuários
   const listaUsuarios = [
     {
       email: "estermariasouza2005@gmail.com",
@@ -51,28 +63,27 @@ async function main() {
       email: "carlos.visitante@yahoo.com",
       nome: "Carlos Visitante",
       tipo: "visitante",
-      // Sem cidadeId para testar usuários com perfil incompleto
     },
   ];
 
   for (const user of listaUsuarios) {
     await prisma.usuario.upsert({
-      where: { email: user.email }, // Busca pelo email, que é o @id
-      update: {}, // Se já existir, não faz nada
-      create: user, // Se não existir, cria
+      where: { email: user.email },
+      update: {},
+      create: user,
     });
   }
 
   console.log("Usuários de teste inseridos com sucesso!");
 
+  // 3. Inserção de Estabelecimentos com Lat/Lng Individuais
   const estabelecimentos = [
     {
       id: 1,
       nome: "Cafe Imperial",
       categoria: "Cafeteria",
       descricao: "Cafe aconchegante no centro historico.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop",
       cep: "35400-000",
       rua: "Rua Direita",
       bairro: "Centro",
@@ -82,14 +93,15 @@ async function main() {
       numAvaliacoes: 42,
       aprovado: true,
       cidadeId: ouroPreto.id,
+      latitude: -20.3848,
+      longitude: -43.5028,
     },
     {
       id: 2,
       nome: "Restaurante Vila Mineira",
       categoria: "Restaurante",
       descricao: "Comida mineira tradicional servida no fogao a lenha.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200&auto=format&fit=crop",
       cep: "35400-000",
       rua: "Rua Sao Jose",
       bairro: "Centro",
@@ -99,14 +111,15 @@ async function main() {
       numAvaliacoes: 35,
       aprovado: true,
       cidadeId: ouroPreto.id,
+      latitude: -20.3862,
+      longitude: -43.5041,
     },
     {
       id: 3,
       nome: "Pousada das Artes",
       categoria: "Hotel",
       descricao: "Hospedagem charmosa perto das principais igrejas.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
       cep: "35400-000",
       rua: "Rua Conde de Bobadela",
       bairro: "Centro",
@@ -116,14 +129,15 @@ async function main() {
       numAvaliacoes: 28,
       aprovado: true,
       cidadeId: ouroPreto.id,
+      latitude: -20.3839,
+      longitude: -43.5055,
     },
     {
       id: 4,
       nome: "Bar do Largo",
       categoria: "Bar",
       descricao: "Petiscos, bebidas e musica ao vivo nos fins de semana.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200&auto=format&fit=crop",
       cep: "35400-000",
       rua: "Rua das Flores",
       bairro: "Antonio Dias",
@@ -133,14 +147,15 @@ async function main() {
       numAvaliacoes: 19,
       aprovado: true,
       cidadeId: ouroPreto.id,
+      latitude: -20.3881,
+      longitude: -43.4998,
     },
     {
       id: 5,
       nome: "Bistro Solar da Ponte",
-      categoria: "Turismo",
+      categoria: "Restaurante", // Alterado de Turismo para categoria válida padrão
       descricao: "Ponto turistico com visitas guiadas pelo centro historico.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200&auto=format&fit=crop",
       cep: "36300-000",
       rua: "Rua Ministro Gabriel Passos",
       bairro: "Centro",
@@ -150,14 +165,15 @@ async function main() {
       numAvaliacoes: 31,
       aprovado: true,
       cidadeId: saoJoaoDelRei.id,
+      latitude: -21.1348,
+      longitude: -44.2601,
     },
     {
       id: 6,
       nome: "Cafe da Serra",
       categoria: "Padaria",
       descricao: "Padaria charmosa com doces caseiros e vista para a serra.",
-      imagemUrl:
-        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop",
+      imagemUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop",
       cep: "36300-000",
       rua: "Rua Getulio Vargas",
       bairro: "Centro",
@@ -167,6 +183,8 @@ async function main() {
       numAvaliacoes: 24,
       aprovado: true,
       cidadeId: saoJoaoDelRei.id,
+      latitude: -21.1371,
+      longitude: -44.2629,
     },
   ];
 
@@ -180,7 +198,7 @@ async function main() {
     });
   }
 
-  console.log("Banco populado com estabelecimentos de teste.");
+  console.log("Banco populado com estabelecimentos de teste e coordenadas geográficas.");
 }
 
 main()
