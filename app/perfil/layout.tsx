@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 
 export default function PerfilLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -91,6 +92,26 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
               <h1 className="text-lg font-bold text-slate-800 tracking-wide uppercase">
                 {usuario?.name || "Usuário"}
               </h1>
+
+              {(usuario?.cidade || usuario?.idade) && (
+                <div className="flex items-center gap-2 mt-1 text-sm font-medium text-slate-500">
+                  {usuario?.cidade && (
+                    <span className="flex items-center gap-1">
+                      <MapPin size={14} className="text-[#2E948A]" />
+                      {usuario.cidade}
+                    </span>
+                  )}
+                  
+                  {usuario?.cidade && usuario?.idade && (
+                    <span className="text-slate-300">•</span>
+                  )}
+                  
+                  {usuario?.idade && (
+                    <span>{usuario.idade} anos</span>
+                  )}
+                </div>
+              )}
+
             </div>
           </div>
 
