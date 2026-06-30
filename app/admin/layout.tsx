@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
-import { MapPin, Building2, MessageSquare, Users, ShieldAlert } from "lucide-react";
+import { MapPin, Building2, MessageSquare, Trophy, Activity, Users, ShieldAlert, BarChart3 } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -30,6 +30,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: "Estabelecimentos", href: "/admin/estabelecimentos", icon: Building2 },
     { label: "Avaliações", href: "/admin/avaliacoes", icon: MessageSquare },
     { label: "Usuários", href: "/admin/usuarios", icon: Users },
+    { label: "Relatório: Ranking", href: "/admin/relatorios/ranking", icon: Trophy },
+    { label: "Relatório: Engajamento", href: "/admin/relatorios/engajamento", icon: Activity },
   ];
 
   return (
