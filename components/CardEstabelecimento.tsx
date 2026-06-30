@@ -3,17 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import EstrelasDeAvaliacao from "@/components/avaliacoes/EstrelasDeAvaliacao";
 
-type CardEstabelecimentoProps = {
+interface CardEstabelecimentoProps {
   id?: number;
   nome?: string;
   categoria?: string;
   avaliacao?: number;
   imagem?: string;
-  descricao?: string; // Adicionado para o admin ver o resumo do local
-  isAdmin?: boolean;  // Ativa o modo de moderação
-  onAprovar?: () => void; // Função de aprovação
-  onRecusar?: () => void; // Função de recusa
-};
+  descricao?: string;
+  isAdmin?: boolean;
+  ehFavorito?: boolean;
+  onAprovar?: () => void;
+  onRecusar?: () => void;
+  children?: React.ReactNode;
+}
 
 export default function CardEstabelecimento({
   id,
@@ -23,8 +25,10 @@ export default function CardEstabelecimento({
   imagem = "/placeholder.jpg",
   descricao,
   isAdmin = false,
+  ehFavorito = false, 
   onAprovar,
   onRecusar,
+  children,
 }: CardEstabelecimentoProps) {
   const estrelasCheias = Math.floor(avaliacao);
   const estrelasVazias = 5 - estrelasCheias;
@@ -44,10 +48,9 @@ export default function CardEstabelecimento({
 
           {/* Só mostra o coração se NÃO for tela de administrador */}
           {!isAdmin && (
-            <Heart
-              size={30}
-              className="text-[var(--secondary)] cursor-pointer hover:scale-110 transition-transform"
-            />
+            <div className="cursor-pointer">
+              {children} 
+            </div>
           )}
         </div>
 

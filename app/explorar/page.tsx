@@ -4,6 +4,8 @@ import BarraDeBusca from "@/components/BarraDeBusca";
 import FiltroCidade from "@/components/FiltroCidade";
 import { prisma } from "@/app/lib/prisma";
 import MapaExplorarClient from "@/components/MapaExplorarClient";
+import { getServerSession } from "next-auth";
+import BotaoFavorito from "@/components/BotaoFavorito";
 
 type PaginaExplorarProps = {
   searchParams: Promise<{
@@ -14,6 +16,8 @@ type PaginaExplorarProps = {
 };
 
 export default async function PaginaExplorar({ searchParams }: PaginaExplorarProps) {
+  const session = await getServerSession();
+  
   const params = await searchParams;
   const termoBuscaParam = Array.isArray(params.q) ? params.q[0] : params.q;
   const cidadeParam = Array.isArray(params.cidade) ? params.cidade[0] : params.cidade;
@@ -59,13 +63,22 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
     }),
   ]);
 
+  let meusFavoritosIds: number[] = [];
+  if (session?.user?.email) {
+    const usuario = await prisma.usuario.findUnique({
+      where: { email: session.user.email },
+      include: { favoritos: { select: { id: true } } }
+    });
+    meusFavoritosIds = usuario?.favoritos.map((f: any) => f.id) ?? [];
+  }
+
   // Define o centro do mapa
   let latCidade = -21.1356; 
   let lngCidade = -44.2612;
 
   if (estabelecimentos.length > 0) {
     const primeiroComCoordenadas = estabelecimentos.find(
-      (e) => e.latitude !== null && e.longitude !== null
+      ((e: any) => e.latitude !== null && e.longitude !== null)
     );
 
     if (primeiroComCoordenadas?.latitude && primeiroComCoordenadas?.longitude) {
@@ -75,10 +88,10 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
   }
 
   const categorias = categoriasBanco
-    .map((item) => item.categoria)
-    .sort((categoriaA, categoriaB) => categoriaA.localeCompare(categoriaB));
+    .map((item: any) => item.categoria)
+    .sort((categoriaA: any, categoriaB: any) => categoriaA.localeCompare(categoriaB));
 
-  const locaisParaOMapa = estabelecimentos.map((est) => ({
+  const locaisParaOMapa = estabelecimentos.map((est: any) => ({
     id: est.id,
     nome: est.nome,
     categoria: est.categoria,
@@ -126,7 +139,7 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
                   : "Nenhum estabelecimento aprovado encontrado."}
               </p>
             ) : (
-              estabelecimentos.map((estabelecimento) => (
+              estabelecimentos.map((estabelecimento: any) => (
                 <CardEstabelecimento
                   key={estabelecimento.id}
                   id={estabelecimento.id}
@@ -134,7 +147,14 @@ export default async function PaginaExplorar({ searchParams }: PaginaExplorarPro
                   categoria={estabelecimento.categoria}
                   avaliacao={estabelecimento.mediaNota}
                   imagem={estabelecimento.imagemUrl ?? "/globe.svg"}
-                />
+                  isAdmin={false}
+                >
+                  <BotaoFavorito 
+                    id={estabelecimento.id} 
+                    ehFavorito={meusFavoritosIds.includes(estabelecimento.id)}
+                    email={session?.user?.email ?? undefined}
+                  />
+                </CardEstabelecimento>
               ))
             )}
           </div>

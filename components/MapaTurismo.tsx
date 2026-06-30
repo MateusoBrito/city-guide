@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { renderToString } from "react-dom/server";
 import { Utensils, Coffee, IceCream, Hotel, Beer, ShoppingCart, MapPin } from "lucide-react";
 import L from "leaflet";
+import { useRouter } from "next/navigation";
 import "leaflet/dist/leaflet.css";
 
 
@@ -78,6 +79,7 @@ interface MapaTurismoProps {
 
 export default function MapaTurismo({ latitudeCidade, longitudeCidade, estabelecimentos }: MapaTurismoProps) {
   const centroCidade: [number, number] = [latitudeCidade, longitudeCidade];
+  const router = useRouter();
 
   return (
     <div className="w-full h-full min-h-[450px] rounded-xl overflow-hidden border-2 border-slate-200 relative z-10">
@@ -98,7 +100,26 @@ export default function MapaTurismo({ latitudeCidade, longitudeCidade, estabelec
               icon={obterIconePorCategoria(local.categoria)}
             >
               <Popup>
-                {/* ... Seu popup atual com foto, nome e categoria permanece intacto ... */}
+                <div className="p-1 min-w-[160px] font-sans text-slate-800">
+                  {local.imagemUrl && (
+                    <img 
+                      src={local.imagemUrl} 
+                      alt={local.nome} 
+                      className="w-full h-20 object-cover rounded mb-2 border border-slate-200"
+                    />
+                  )}
+                  <h4 className="font-bold text-sm m-0 leading-tight text-[#24504F]">{local.nome}</h4>
+                  <p className="text-[11px] text-[#2E948A] font-bold uppercase mt-0.5 mb-2.5">
+                    {local.categoria}
+                  </p>
+                  
+                  <button
+                    onClick={() => router.push(`/estabelecimentos/${local.id}`)}
+                    className="w-full bg-[#24504F] hover:bg-[#1e3a3a] text-white text-center text-xs font-bold py-1.5 px-2 rounded transition-colors cursor-pointer"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
               </Popup>
             </Marker>
           );

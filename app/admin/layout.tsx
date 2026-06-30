@@ -38,9 +38,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="w-64 bg-[#24504F] text-white flex flex-col shrink-0 min-h-screen shadow-md">
         <div className="p-6 border-b border-[#2E948A]/30">
           <h2 className="text-xl font-extrabold tracking-tight flex items-center gap-2 text-white">
-            <ShieldAlert size={22} className="text-[#2E948A]" /> CityGuide Admin
+            <ShieldAlert size={40} className="text-[#2E948A]" /> Painel do Administrador
           </h2>
-          <p className="text-xs text-teal-200 mt-1">Painel do Administrador</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-2 mt-4">
