@@ -54,22 +54,6 @@ export default function HomePage() {
             Encontre o local ideal para o que você precisa! Explore as avaliações, cadastre novos estabelecimentos e compartilhe suas próprias experiências com a comunidade.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link 
-              href="/explorar" 
-              className="bg-[#2E948A] hover:bg-[#24756d] text-white px-8 py-4 rounded-full font-bold text-center transition-colors shadow-lg"
-            >
-              Estabelecimentos em Destaque
-            </Link>
-            
-            <Link 
-              href="/recentes" 
-              className="bg-[#333333] hover:bg-[#222222] text-white px-8 py-4 rounded-full font-bold text-center transition-colors shadow-lg"
-            >
-              Abertos recentemente
-            </Link>
-          </div>
-
         </div>
       </main>
 
