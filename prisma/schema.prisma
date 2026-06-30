@@ -23,8 +23,8 @@ model Cidade {
   usuarios  Usuario[]
   estabelecimentos Estabelecimento[]
 
-  latitude  Float @default(0.0)
-  longitude  Float @default(0.0)
+  latitude  Float
+  longitude  Float
 }
 
 model Estabelecimento {
@@ -52,7 +52,7 @@ model Estabelecimento {
   criadoEm DateTime @default(now())
 
   cidadeId  Int
-  cidade  Cidade @relation(fields: [cidadeId], references: [id])
+  cidade    Cidade @relation(fields: [cidadeId], references: [id], onDelete: Cascade)
 
   proprietarioEmail String?
   proprietario  Usuario? @relation(fields: [proprietarioEmail], references: [email])

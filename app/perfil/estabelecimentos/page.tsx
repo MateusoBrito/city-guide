@@ -177,7 +177,7 @@ export default function EstabelecimentosPage() {
             
             <div className="md:col-span-2 bg-slate-50 p-4 rounded-md border border-dashed border-gray-300">
               <label className="block text-sm font-bold text-gray-700 mb-1">
-                {localParaEditar ? "Alterar Foto de Capa (opcional)" : "Foto de Capa do Estabelecimento"}
+                {localParaEditar ? "Alterar Foto de Capa (opcional) [5MB]" : "Foto de Capa do Estabelecimento [5MB]"}
               </label>
               <input 
                 type="file" 
